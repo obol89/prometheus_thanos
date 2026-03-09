@@ -1,0 +1,59 @@
+---
+
+- name: Include common tasks
+  ansible.builtin.include_tasks: common.yml
+  tags:
+    - prometheus_thanos
+
+- name: Include Prometheus tasks
+  ansible.builtin.include_tasks: prometheus.yml
+  tags:
+    - prometheus_thanos
+
+- name: Include Prometheus reload tasks
+  ansible.builtin.include_tasks: prometheus_reload.yml
+  tags:
+    - prometheus_reload
+
+- name: Include Thanos Sidecar tasks
+  ansible.builtin.include_tasks: thanos_sidecar.yml
+  tags:
+    - prometheus_thanos
+
+- name: Include Thanos Store tasks
+  ansible.builtin.include_tasks: thanos_store.yml
+  when: "'store' in prometheus_role"
+  tags:
+    - prometheus_thanos
+
+- name: Include Thanos Query tasks
+  ansible.builtin.include_tasks: thanos_query.yml
+  when: "'store' in prometheus_role"
+  tags:
+    - prometheus_thanos
+
+- name: Include Thanos Compact tasks
+  ansible.builtin.include_tasks: thanos_compact.yml
+  when: "'store' in prometheus_role"
+  tags:
+    - prometheus_thanos
+
+- name: Include Prometheus Alertmanager tasks
+  ansible.builtin.include_tasks: prometheus_alertmanager.yml
+  when: "'sidecar' in prometheus_role"
+  tags:
+    - prometheus_thanos
+    - prometheus_reload
+
+- name: Include Thanos Rule tasks
+  ansible.builtin.include_tasks: thanos_rule.yml
+  when: "'store' in prometheus_role"
+  tags:
+    - prometheus_thanos
+    - prometheus_reload
+
+- name: Deploy haproxy for Thanos Query
+  ansible.builtin.include_tasks: haproxy.yml
+  when: "'store' in prometheus_role"
+  tags:
+    - prometheus_thanos

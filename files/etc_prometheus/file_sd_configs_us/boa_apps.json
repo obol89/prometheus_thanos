@@ -1,0 +1,24 @@
+[
+  {
+    "targets": [
+      "tmpg-fail:11111"
+    ],
+    "labels": {
+      "module": "tmpg_fail",
+      "env": "prd",
+      "colo": "dc2",
+      "metrics_path": "/metrics"
+    }
+  },
+  {
+    "targets": [
+      "rins-dashboard:11112"
+    ],
+    "labels": {
+      "module": "rins_dashboard",
+      "env": "prd",
+      "colo": "dc2",
+      "metrics_path": "/metrics"
+    }
+  }
+]

@@ -1,0 +1,79 @@
+[
+  {
+    "targets": [
+      "prd-app21:9992"
+    ],
+    "labels": {
+      "module": "TradeFlow",
+      "colo": "dc2",
+      "env": "prod",
+      "host": "prd-app21"
+    }
+  },
+  {
+    "targets": [
+      "prd-gateway06:9992"
+    ],
+    "labels": {
+      "module": "TradeFlow",
+      "colo": "dc5",
+      "env": "prod",
+      "host": "prd-gateway06"
+    }
+  },
+  {
+    "targets": [
+      "prd-gateway04:9992"
+    ],
+    "labels": {
+      "module": "TradeFlow",
+      "colo": "dc6",
+      "env": "prod",
+      "host": "prd-gateway04"
+    }
+  },
+  {
+    "targets": [
+      "prd-gateway51:9992"
+    ],
+    "labels": {
+      "module": "TradeFlow",
+      "colo": "dc7",
+      "env": "prod",
+      "host": "prd-gateway51"
+    }
+  },
+  {
+    "targets": [
+      "prd-gateway06:9992"
+    ],
+    "labels": {
+      "module": "TradeFlow",
+      "colo": "dc8",
+      "env": "prod",
+      "host": "prd-gateway06"
+    }
+  },
+  {
+    "targets": [
+      "prd-gateway02:9992"
+    ],
+    "labels": {
+      "module": "TradeFlow",
+      "colo": "dc4",
+      "env": "prod",
+      "host": "prd-gateway02"
+    }
+  },
+  {
+    "targets": [
+      "prd-gateway01:9992"
+    ],
+    "labels": {
+      "module": "TradeFlow",
+      "colo": "dc9",
+      "env": "prod",
+      "host": "prd-gateway01"
+    }
+  }
+]

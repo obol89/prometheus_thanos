@@ -1,0 +1,20 @@
+[Unit]
+Description=Prometheus
+After=network-online.target
+
+[Service]
+Type=simple
+User={{ prometheus_user }}
+Group={{ prometheus_group }}
+ExecStart={{ binary_dir }}/prometheus \
+    --config.file={{ prometheus_config_dir }}/prometheus.yml \
+    --storage.tsdb.path={{ prometheus_data_dir }} \
+    --storage.tsdb.retention.time={{ prometheus_tsdb_retention_time }} \
+    --web.listen-address=0.0.0.0:{{ prometheus_http_port }} \
+    --web.enable-lifecycle \
+    --storage.tsdb.min-block-duration=2h \
+    --storage.tsdb.max-block-duration=2h
+Restart=always
+
+[Install]
+WantedBy=multi-user.target 

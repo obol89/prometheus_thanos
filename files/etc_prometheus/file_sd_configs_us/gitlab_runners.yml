@@ -1,0 +1,2 @@
+---
+- targets: ["dev-build06:9252", "dev-test001:9252", "dev-runner02:9252", "prd-infra03:9252", "dev-build01:9252", "prd-trade01:9252", "dev-analytics11:9252", "dev-trade02:9252", "dev-web01:9252", "dev-runner01:9252", "prd-services03:9252", "dev-build05:9252", "prd-runner03:9252", "dev-build04:9252", "dev-build03:9252", "dev-runner01:9252"]

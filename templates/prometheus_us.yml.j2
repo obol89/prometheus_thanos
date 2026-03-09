@@ -1,0 +1,387 @@
+---
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+  external_labels:
+    region: {{ prometheus_region }}
+    replica: {{ prometheus_role }}
+
+# Moved to Thanos Rule
+rule_files:
+  - "/etc/prometheus/rules/*.yml"
+  - "/etc/prometheus/rules/rabbitmq.yml"
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["{{ ansible_hostname }}:9090"]
+
+  - job_name: elasticsearch
+    static_configs:
+      - targets: ["elasticsearch-host:9114"]
+
+  - job_name: gitlab-rails
+    metrics_path: "/-/metrics"
+    scheme: http
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    static_configs:
+      - targets:
+        - gitlab-host
+
+  - job_name: gitlab-redis
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    static_configs:
+      - targets:
+        - gitlab-host:9121
+
+  - job_name: gitlab-postgres
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    static_configs:
+      - targets:
+        - gitlab-host:9187
+
+  - job_name: gitlab-workhorse
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    static_configs:
+      - targets:
+        - gitlab-host:9229
+
+  - job_name: gitlab-sidekiq
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    static_configs:
+      - targets:
+        - gitlab-host:8082
+
+  - job_name: gitlab-ci-pipelines-exporter
+    metrics_path: /metrics
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    static_configs:
+      - targets: ['ci-pipelines-host:8080']
+
+  - job_name: gitlab-runners
+    metrics_path: /metrics
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/gitlab_runners.yml'
+
+  - job_name: last-user-monitoring-devices
+    metrics_path: /metrics
+    scrape_interval: 600s
+    scrape_timeout: 15s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-last-user-devices-us
+        refresh_interval: 600s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: last-user-monitoring-vm
+    metrics_path: /metrics
+    scrape_interval: 600s
+    scrape_timeout: 15s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-last-user-vm-us
+        refresh_interval: 600s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: home-usage-monitoring-devices
+    metrics_path: /metrics
+    scrape_interval: 600s
+    scrape_timeout: 30s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-home-usage-devices-us
+        refresh_interval: 600s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"    
+
+  - job_name: home-usage-monitoring-vm
+    metrics_path: /metrics
+    scrape_interval: 600s
+    scrape_timeout: 30s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-home-usage-vm-us
+        refresh_interval: 600s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: timesync-devices
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-timesync-devices-us
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"    
+
+  - job_name: timesync-vm
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-timesync-vm-us
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: rabbitmq
+    metrics_path: /
+    scrape_interval: 6s
+    scrape_timeout: 5s
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/rabbitmq.json'
+
+  - job_name: "monitor-cme-party-id-reg"
+    metrics_path: /
+    scrape_interval: 5s
+    scrape_timeout: 4s
+    static_configs:
+      - targets: ["app-host01:9091"]
+
+  - job_name: "il_monitor"
+    metrics_path: /
+    scrape_interval: 2m
+    scrape_timeout: 10s
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/il_monitor_targets.json'
+
+  - job_name: "settelments_service"
+    metrics_path: /metrics/
+    scrape_interval: 5m
+    scrape_timeout: 4m
+    static_configs:
+      - targets: ["services-host01:25001"]
+
+  - job_name: "DBs_monitoring"
+    scrape_interval: 5s
+    scrape_timeout: 4s
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/DBs_monitor_targets.json'
+
+  - job_name: "TC-session-service"
+    metrics_path: /metrics/
+    scrape_interval: 5s
+    scrape_timeout: 4s
+    static_configs:
+      - targets: ["session-service-host:8888"]
+
+  - job_name: windows-device-monitoring
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-monitoring-devices-windows-us
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+  
+  - job_name: windows-vm-monitoring
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-monitoring-vm-windows-us
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: "infrastructure-monitoring"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-monitoring-devices-us
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: "vm-monitoring"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-monitoring-vm-us
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: "docker-vm-monitoring"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-monitoring-docker-us
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+  
+  - job_name: "docker-baremetal-monitoring"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-monitoring-docker-us
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: "containers-vm-monitoring"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-monitoring-containers-us
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+  
+  - job_name: "containers-baremetal-monitoring"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-monitoring-containers-us
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: "tradeflow"
+    metrics_path: /metrics
+    scrape_interval: 5s
+    scrape_timeout: 4s
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/target_tradeflow_us.json'
+
+  - job_name: "haproxy"
+    metrics_path: /metrics
+    scrape_interval: 5s
+    scrape_timeout: 4s
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/haproxy.json'
+
+  - job_name: "daily_stats"
+    metrics_path: /metrics
+    scrape_interval: 5m
+    scrape_timeout: 5s
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/daily_stats.json'
+
+  - job_name: "tc-dc-logon-monitoring"
+    metrics_path: /
+    scrape_interval: 30s
+    scrape_timeout: 8s
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/tc_dc_logon_monitor_us.json'
+
+  - job_name: "kafka-monitor"
+    metrics_path: /
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/kafka_monitor.json'
+
+  - job_name: "airflow-monitor"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 5s
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/airflow.json'
+
+  - job_name: "linux-processes-vm"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-processes-vm-us
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: "linux-processes-devices"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-processes-devices-us
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: 'snmp'
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-snmp-devices-us
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+    metrics_path: /snmp
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    params:
+      auth: [{{ snmp_auth_profile }}]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: {{ ansible_hostname }}:9116  # The SNMP exporter's real hostname:port.
+
+  # Global snmp_exporter-level metrics
+  - job_name: 'snmp_exporter'
+    static_configs:
+      - targets: ['{{ ansible_hostname }}:9116']
+
+
+  - job_name: "redis-nodes"
+    metrics_path: /scrape
+    scrape_interval: 30s
+    scrape_timeout: 8s
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/redis-nodes.json'
+
+  - job_name: "boa_apps"
+    scrape_interval: 2m
+    scrape_timeout: 10s
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/boa_apps.json'

@@ -1,0 +1,33 @@
+---
+- name: Install HAProxy
+  ansible.builtin.apt:
+    name: haproxy
+    state: present
+    update_cache: true
+  tags:
+    - prometheus_thanos
+
+- name: Deploy HAProxy config
+  ansible.builtin.template:
+    src: templates/haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: root
+    mode: "0644"
+  tags:
+    - prometheus_thanos
+
+- name: Ensure HAProxy is enabled and running
+  ansible.builtin.service:
+    name: haproxy
+    state: started
+    enabled: true
+  tags:
+    - prometheus_thanos
+
+- name: Restart HAProxy
+  ansible.builtin.service:
+    name: haproxy
+    state: restarted
+  tags:
+    - prometheus_thanos

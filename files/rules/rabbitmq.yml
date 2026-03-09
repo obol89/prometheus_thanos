@@ -1,0 +1,42 @@
+groups:
+  - name: rabbitmq
+    rules:
+      - alert: rabbitmq:node_up
+        expr: min without(replica) (rabbitmq_node_up) != 1
+        labels:
+          severity: page
+        annotations:
+          summary: "RabbitMQ node {{ $labels.instance }} is down!"
+
+      - alert: rabbitmq:messages_not_consumed
+        expr: rabbitmq_queue_messages{env="prd"} * ((rabbitmq_queue_consumers == 0) + 1) >1000
+        for: 60m
+        labels:
+          severity: page
+        annotations:
+          summary: "Messages in the RabbitMQ vhost:{{ $labels.vhost }} queue:{{ $labels.queue }} in node:{{ $labels.instance }} are not being consumed. Current total: {{ $value }} "
+
+      - alert: rabbitmq:messages_not_consumed_tradeflow
+        expr: rabbitmq_queue_messages{env="prd", vhost="tradeflow"} * ((rabbitmq_queue_consumers == 0) + 1) >0
+        for: 60m
+        labels:
+          severity: page
+        annotations:
+          summary: "TradeFlow Messages in the RabbitMQ vhost:{{ $labels.vhost }} queue:{{ $labels.queue }} in node:{{ $labels.instance }} are not being consumed. Current total: {{ $value }} "
+
+      - alert: rabbitmq:queue_not_empty_tradeflow
+        expr: rabbitmq_queue_messages{env="prd", vhost="tradeflow"} >0
+        for: 60m
+        labels:
+          severity: page
+        annotations:
+          summary: "TradeFlow Messages in the RabbitMQ vhost:{{ $labels.vhost }} queue:{{ $labels.queue }} in node:{{ $labels.instance }} are not being consumed. Current total: {{ $value }} "
+
+      - alert: Runaway_RabbitMQ_queue
+        expr: rabbitmq_queue_messages{env="prd"} > 1500
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Queue: {{ $labels.queue }} on {{ $labels.instance }}  is overflowing"
+          description: "Queue: {{ $labels.queue }} on {{ $labels.instance }}  is overflowing.  Dashboard is here: http://grafana/d/oH-ObDRWk/rabbitmq-monitoring?orgId=1 "

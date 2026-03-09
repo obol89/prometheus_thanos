@@ -1,0 +1,65 @@
+[
+  {
+    "targets": [
+      "prd-kafka07:9104"
+    ],
+    "labels": {
+      "module": "mysql_exporter",
+      "colo": "dc2",
+      "env": "prod",
+      "host": "secmasterV2"
+    }
+  },
+  {
+    "targets": [
+      "prd-kafka07:9103"
+    ],
+    "labels": {
+      "__metrics_path__": "/scrape",
+      "__param_target": "mongodb://dev-kafka01:27017",
+      "module": "MongoDB",
+      "colo": "dc1",
+      "env": "uat",
+      "host": "UAT_mongoDB"
+    }
+  },
+  {
+    "targets": [
+      "prd-kafka07:9103"
+    ],
+    "labels": {
+      "__metrics_path__": "/scrape",
+      "__param_target": "mongodb://dev-mongodb01:27017",
+      "module": "MongoDB",
+      "colo": "dc1",
+      "env": "dev",
+      "host": "dev-mongodb01"
+    }
+  },
+  {
+    "targets": [
+      "prd-kafka07:9103"
+    ],
+    "labels": {
+      "__metrics_path__": "/scrape",
+      "__param_target": "mongodb://prd-mongodb01:27017",
+      "module": "MongoDB",
+      "colo": "dc2",
+      "env": "prd",
+      "host": "prd-mongodb01"
+    }
+  },
+  {
+    "targets": [
+      "prd-kafka07:9103"
+    ],
+    "labels": {
+      "__metrics_path__": "/scrape",
+      "__param_target": "mongodb://prd-mongodb01:27017",
+      "module": "MongoDB",
+      "colo": "dc2",
+      "env": "prd",
+      "host": "prd-mongodb01"
+    }
+  }
+]

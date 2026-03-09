@@ -1,0 +1,21 @@
+[Unit]
+Description=Thanos Rule
+After=network.target
+
+[Service]
+User={{ prometheus_user }}
+Group={{ prometheus_group }}
+ExecStart=/usr/local/bin/thanos rule \
+  --log.level=info \
+  --grpc-address=0.0.0.0:{{ thanos_rule_grpc_port }} \
+  --http-address=0.0.0.0:{{ thanos_rule_http_port }} \
+  --data-dir={{ thanos_rule_data_dir }} \
+  --eval-interval={{ thanos_rule_eval_interval }} \
+  --query={{ thanos_rule_query_endpoint }} \
+  {{ thanos_rule_alertmanager | map('regex_replace', '^(.*)$', '--alertmanagers.url=http://\\1:9093') | join(' \\\n  ') }} \
+  {{ thanos_rule_rule_files | map('regex_replace', '^(.*)$', '--rule-file=\\1') | join(' \\\n  ') }}
+
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

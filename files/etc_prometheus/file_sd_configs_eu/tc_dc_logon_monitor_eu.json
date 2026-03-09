@@ -1,0 +1,24 @@
+[
+    {
+        "targets": [
+            "prd-app11:9991"
+        ],
+        "labels": {
+            "module": "tc_dc_logon_monitor",
+            "colo": "dc5",
+            "env": "prd",
+            "host": "prd-app11"
+        }
+    },
+    {
+        "targets": [
+            "prd-gateway02:9991"
+        ],
+        "labels": {
+            "module": "tc_dc_logon_monitor",
+            "colo": "dc2",
+            "env": "prd",
+            "host": "prd-gateway02"
+        }
+    }
+]

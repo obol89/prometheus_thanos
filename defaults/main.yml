@@ -1,0 +1,67 @@
+---
+# Prometheus configuration
+prometheus_version: "2.53.4"
+prometheus_tsdb_retention_time: "15d"
+
+# Thanos configuration
+thanos_version: "0.38.0"
+thanos_compactor_retention_time_raw: "365d"
+thanos_compactor_retention_time_5m: "365d"
+thanos_compactor_retention_time_1h: "365d"
+thanos_query_endpoints:
+  - prom-node01
+  - prom-node02
+thanos_rule_alertmanager:
+  - prom-node01
+  - prom-node02
+thanos_rule_eval_interval: 30s
+thanos_rule_query_endpoint: "http://prom-node01:{{ thanos_query_http_port }}"
+thanos_rule_rule_files:
+  - "{{ thanos_rule_rules_dir }}/*.yaml"
+  - "{{ thanos_rule_rules_dir }}/*.yml"
+
+# Service configuration
+prometheus_user: "prometheus"
+prometheus_group: "prometheus"
+prometheus_data_dir: "/data/prometheus"
+prometheus_config_dir: "/etc/prometheus"
+binary_dir: "/usr/local/bin"
+thanos_data_dir: "/data/thanos/{{ ansible_hostname }}"
+thanos_data_root_dir: "/data/thanos"
+thanos_config_dir: "/etc/thanos"
+thanos_compact_dir: "/data/thanos-compact"
+thanos_rule_data_dir: "/data/thanos-rule"
+thanos_rule_rules_dir: "{{ thanos_config_dir }}/rules"
+
+# Network configuration
+prometheus_http_port: 9090
+thanos_query_http_port: 10902
+thanos_query_grpc_port: 10901
+thanos_sidecar_http_port: 10904
+thanos_sidecar_grpc_port: 10903
+thanos_store_http_port: 10906
+thanos_store_grpc_port: 10905
+thanos_compact_http_port: 10907
+thanos_rule_grpc_port: 10908
+thanos_rule_http_port: 10909
+
+# Haproxy configuration
+haproxy_backend_host: "127.0.0.1"
+haproxy_backend_port: 10902
+haproxy_frontend_port: 80
+
+# Alertmanager configuration
+prometheus_alertmanager_version: "0.28.1"
+prometheus_alertmanager_config_path: /etc/alertmanager
+prometheus_alertmanager_data_dir: /data/alertmanager
+prometheus_alertmanager_cluster_peers:
+  - prom-node01
+  - prom-node02
+
+# Secrets - override these in your inventory/group_vars/host_vars
+# netbox_api_token: "your-netbox-api-token-here"
+# alertmanager_smtp_smarthost: "smtp.example.com:25"
+# alertmanager_smtp_from: "alertmanager@example.com"
+# alertmanager_email_recipient: "alerts@example.com"
+# alertmanager_webhook_url: "https://your-webhook-url-here"
+# snmp_auth_profile: "your_snmp_v3_profile"

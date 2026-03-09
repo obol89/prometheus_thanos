@@ -1,0 +1,90 @@
+[
+    {
+        "targets": [
+            "prd-app11:9991"
+        ],
+        "labels": {
+            "module": "tc_dc_logon_monitor",
+            "colo": "dc2",
+            "env": "prd",
+            "host": "prd-app11"
+        }
+    },
+    {
+        "targets": [
+            "prd-app22:9991"
+        ],
+        "labels": {
+            "module": "tc_dc_logon_monitor",
+            "colo": "dc2",
+            "env": "prd",
+            "host": "prd-app22"
+        }
+    },
+    {
+        "targets": [
+            "prd-gateway06:9991"
+        ],
+        "labels": {
+            "module": "tc_dc_logon_monitor",
+            "colo": "dc5",
+            "env": "prd",
+            "host": "prd-gateway06"
+        }
+    },
+    {
+        "targets": [
+            "prd-gateway01:9991"
+        ],
+        "labels": {
+            "module": "tc_dc_logon_monitor",
+            "colo": "dc5",
+            "env": "prd",
+            "host": "prd-gateway01"
+        }
+    },
+    {
+        "targets": [
+            "prd-gateway51:9991"
+        ],
+        "labels": {
+            "module": "tc_dc_logon_monitor",
+            "colo": "dc5",
+            "env": "prd",
+            "host": "prd-gateway51"
+        }
+    },
+    {
+        "targets": [
+            "prd-gateway06:9991"
+        ],
+        "labels": {
+            "module": "tc_dc_logon_monitor",
+            "colo": "dc5",
+            "env": "prd",
+            "host": "prd-gateway06"
+        }
+    },
+    {
+        "targets": [
+            "prd-gateway04:9991"
+        ],
+        "labels": {
+            "module": "tc_dc_logon_monitor",
+            "colo": "dc5",
+            "env": "prd",
+            "host": "prd-gateway04"
+        }
+    },
+    {
+        "targets": [
+            "prd-sentinel02:9991"
+        ],
+        "labels": {
+            "module": "tc_dc_logon_monitor",
+            "colo": "dc2",
+            "env": "prd",
+            "host": "prd-sentinel02"
+        }
+    }
+]

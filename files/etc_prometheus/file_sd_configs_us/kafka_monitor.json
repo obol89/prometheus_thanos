@@ -1,0 +1,156 @@
+[
+    {
+        "targets": [
+            "dev-kafka03:5556"
+        ],
+        "labels": {
+            "module": "kafka-monitor",
+            "colo": "dc1",
+            "env": "dev",
+            "host": "dev-kafka03:5556"
+        }
+    },
+    {
+        "targets": [
+            "dev-kafka02:5556"
+        ],
+        "labels": {
+            "module": "kafka-monitor",
+            "colo": "dc1",
+            "env": "dev",
+            "host": "dev-kafka02:5556"
+        }
+    },
+    {
+        "targets": [
+            "dev-kafka01:5556"
+        ],
+        "labels": {
+            "module": "kafka-monitor",
+            "colo": "dc1",
+            "env": "dev",
+            "host": "dev-kafka01:5556"
+        }
+    },
+    {
+        "targets": [
+            "prd-kafka01:5556"
+        ],
+        "labels": {
+            "module": "kafka-monitor",
+            "colo": "dc1",
+            "env": "prd",
+            "host": "prd-kafka01:5556"
+        }
+    },
+    {
+        "targets": [
+            "prd-kafka02:5556"
+        ],
+        "labels": {
+            "module": "kafka-monitor",
+            "colo": "dc1",
+            "env": "prd",
+            "host": "prd-kafka02:5556"
+        }
+    },
+    {
+        "targets": [
+            "prd-kafka03:5556"
+        ],
+        "labels": {
+            "module": "kafka-monitor",
+            "colo": "dc1",
+            "env": "prd",
+            "host": "prd-kafka03:5556"
+        }
+    },
+    {
+        "targets": [
+            "prd-kafka04:5556"
+        ],
+        "labels": {
+            "module": "kafka-monitor",
+            "colo": "dc2",
+            "env": "prd",
+            "host": "prd-kafka04:5556"
+        }
+    },
+    {
+        "targets": [
+            "prd-kafka05:5556"
+        ],
+        "labels": {
+            "module": "kafka-monitor",
+            "colo": "dc2",
+            "env": "prd",
+            "host": "prd-kafka05:5556"
+        }
+    },
+    {
+        "targets": [
+            "prd-kafka06:5556"
+        ],
+        "labels": {
+            "module": "kafka-monitor",
+            "colo": "dc2",
+            "env": "prd",
+            "host": "prd-kafka06:5556"
+        }
+    },
+    {
+        "targets": [
+            "dev-kafka01:5556"
+        ],
+        "labels": {
+            "module": "kafka-monitor",
+            "colo": "dc1",
+            "env": "prd",
+            "host": "dev-kafka01:5556"
+        }
+    },
+    {
+        "targets": [
+            "prd-risk01:5556"
+        ],
+        "labels": {
+            "module": "kafka-monitor",
+            "colo": "dc8",
+            "env": "prd",
+            "host": "prd-risk01:5556"
+        }
+    },
+    {
+        "targets": [
+            "prd-risk01:5556"
+        ],
+        "labels": {
+            "module": "kafka-monitor",
+            "colo": "dc5",
+            "env": "prd",
+            "host": "prd-risk01:5556"
+        }
+    },
+    {
+        "targets": [
+            "prd-capture02:5556"
+        ],
+        "labels": {
+            "module": "kafka-monitor",
+            "colo": "dc2",
+            "env": "prd",
+            "host": "prd-capture02:5556"
+        }
+    },
+    {
+        "targets": [
+            "prd-risk01:5556"
+        ],
+        "labels": {
+            "module": "kafka-monitor",
+            "colo": "dc10",
+            "env": "prd",
+            "host": "prd-risk01:5556"
+        }
+    }
+]

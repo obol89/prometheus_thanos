@@ -1,0 +1,21 @@
+#!/bin/bash
+
+SRC_DIR="/data/thanos/{{ ansible_hostname }}"
+DEST_HOST="prd-prometheus01"
+DEST_DIR="/data/thanos"
+
+# Make sure a temp list is clean
+TMP_LIST="/tmp/thanos_valid_blocks.txt"
+> "$TMP_LIST"
+
+# Find valid blocks (ULID folders with required files)
+find "$SRC_DIR" -maxdepth 1 -type d -name '0[1-9A-Z]*' | while read -r block; do
+  if [[ -f "$block/meta.json" && -f "$block/index" && -d "$block/chunks" ]]; then
+    echo "$block" >> "$TMP_LIST"
+  fi
+done
+
+# Rsync each block folder and remove it after
+while read -r block; do
+  rsync -avz "$block" "$DEST_HOST:$DEST_DIR/" && rm -rf "$block"
+done < "$TMP_LIST"

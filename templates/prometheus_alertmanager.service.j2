@@ -1,0 +1,16 @@
+[Unit]
+Description=Alertmanager
+After=network.target
+
+[Service]
+User={{ prometheus_user }}
+Group={{ prometheus_group }}
+ExecStart=/usr/local/bin/alertmanager \
+  --config.file={{ prometheus_alertmanager_config_path }}/alertmanager.yml \
+  --storage.path={{ prometheus_alertmanager_data_dir }}{% if prometheus_alertmanager_cluster_peers %} \
+  {{ prometheus_alertmanager_cluster_peers | map('regex_replace', '^(.*)$', '--cluster.peer=\\1:9094') | join(' \\\n  ') }}{% endif %}
+
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

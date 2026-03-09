@@ -1,0 +1,24 @@
+[
+    {
+        "targets": [
+            "dev-kafka01:9102"
+        ],
+        "labels": {
+            "module": "uat-airflow",
+            "colo": "dc1",
+            "env": "dev",
+            "host": "dev-kafka01"
+        }
+    },
+    {
+        "targets": [
+            "prd-audit02:9102"
+        ],
+        "labels": {
+            "module": "prod-airflow",
+            "colo": "dc1",
+            "env": "prod",
+            "host": "prd-audit02"
+        }
+    }
+]

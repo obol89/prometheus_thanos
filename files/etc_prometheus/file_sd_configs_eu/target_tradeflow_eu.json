@@ -1,0 +1,24 @@
+[
+    {
+        "targets": [
+            "prd-app11:9100"
+        ],
+        "labels": {
+            "module": "TradeFlow",
+            "colo": "dc3",
+            "env": "prod",
+            "host": "prd-app11"
+        }
+    },
+    {
+        "targets": [
+            "prd-gateway02:9100"
+        ],
+        "labels": {
+            "module": "TradeFlow",
+            "colo": "dc4",
+            "env": "prod",
+            "host": "prd-gateway02"
+        }
+    }
+]

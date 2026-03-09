@@ -1,0 +1,49 @@
+---
+- name: Create Thanos Rule data dir
+  ansible.builtin.file:
+    path: "{{ thanos_rule_data_dir }}"
+    state: directory
+    mode: "0755"
+    owner: prometheus
+    group: prometheus
+  tags:
+    - prometheus_thanos
+
+- name: Create Thanos Rule rules dir
+  ansible.builtin.file:
+    path: "{{ thanos_rule_rules_dir }}"
+    state: directory
+    mode: "0755"
+    owner: prometheus
+    group: prometheus
+  tags:
+    - prometheus_thanos
+
+- name: Copy alert rules
+  ansible.builtin.copy:
+    src: files/rules/
+    dest: "{{ thanos_rule_rules_dir }}/"
+    mode: '0644'
+    owner: prometheus
+    group: prometheus
+  tags:
+    - prometheus_thanos
+    - prometheus_reload
+
+- name: Configure systemd service for Thanos Rule
+  ansible.builtin.template:
+    src: templates/thanos-rule.service.j2
+    dest: /etc/systemd/system/thanos-rule.service
+    mode: "0644"
+  tags:
+    - prometheus_thanos
+
+- name: Enable and start Thanos Rule
+  ansible.builtin.systemd_service:
+    name: thanos-rule
+    enabled: true
+    state: restarted
+    daemon_reload: true
+  tags:
+    - prometheus_thanos
+    - prometheus_reload

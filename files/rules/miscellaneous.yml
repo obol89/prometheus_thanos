@@ -1,0 +1,38 @@
+---
+groups:
+  - name: miscellaneous
+    rules:
+      - alert: Haproxy backend is down!
+        expr: max without(replica) (haproxy_backend_check_up_down_total) == 1
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $labels.instance }} {{ $labels.proxy }} is down!"
+
+      - alert: Risk webservice 5xx code > 10
+        expr: haproxy_frontend_http_responses_total{ code = "5xx",proxy !="stats", host="riskcalculator"} > 20
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $labels.host }} returns a lot of 5xx requests codes!"
+          description: "{{ $labels.host }} returns a lot of 5xx requests codes!  Dashboard is here: http://grafana/d/fae739dc-6b9e-4095-b4f2-f76b3a4c8838/haproxy-copy?orgId=1&refresh=5m&from=now-7d&to=now# "
+
+      - alert: Redis Prod Node is down
+        expr: redis_up{env="prd"} < 1
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $labels.instance }} is down!"
+          description: "{{ $labels.instance }} node is down.  http://grafana/d/e008bc3f-81a2-40f9-baf2-a33fd8dec7ec/redis-dashboard?orgId=1&from=now-3h&to=now&var-namespace=dev-cluster01&var-instance=dev-auxiliary01:7002&var-instance=dev-auxiliary01:7005&var-instance=dev-kafka01:7001&var-instance=dev-kafka01:7004&var-instance=dev-trade02:7003&var-instance=dev-trade02:7006&refresh=30s "
+
+      - alert: DailyStats is down
+        expr: up{job="daily_stats"} == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "DailyStats {{ $labels.exchange }} {{ $labels.instance }} on {{ $labels.host }} is down"
+          description: "The exporter {{ $labels.exchange }} {{ $labels.instance }} on {{ $labels.host }}  is not responding or is down for more than 5 minutes. Dashboard is here: http://grafana/d/daily_stats/daily-stats?orgId=1&from=now-2d&to=now&timezone=America%2FChicago"

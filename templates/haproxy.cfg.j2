@@ -1,0 +1,24 @@
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    daemon
+    maxconn 2048
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    timeout connect 5s
+    timeout client  30s
+    timeout server  30s
+
+frontend http-in
+    bind *:{{ haproxy_frontend_port }}
+    mode http
+    default_backend thanos_query_backend
+
+backend thanos_query_backend
+    mode http
+    balance roundrobin
+    option httpchk GET /
+    server thanos_query1 {{ haproxy_backend_host }}:{{ haproxy_backend_port }} check

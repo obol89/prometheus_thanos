@@ -1,0 +1,58 @@
+---
+- name: Configure systemd service for Prometheus
+  ansible.builtin.template:
+    src: prometheus.service.j2
+    dest: /etc/systemd/system/prometheus.service
+    mode: "0644"
+  tags:
+    - prometheus_thanos
+
+- name: Configure prometheus.yml for Prometheus
+  ansible.builtin.template:
+    src: "prometheus_{{ prometheus_region }}.yml.j2"
+    dest: "{{ prometheus_config_dir }}/prometheus.yml"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: "0644"
+  tags:
+    - prometheus_thanos
+
+- name: Configure file_sd_configs for Prometheus
+  ansible.builtin.copy:
+    src: "files/etc_prometheus/file_sd_configs_{{ prometheus_region }}/"
+    dest: "/etc/prometheus/file_sd_configs/"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: "0644"
+  tags:
+    - prometheus_thanos
+
+- name: Configure rules for Prometheus
+  ansible.builtin.copy:
+    src: "files/etc_prometheus/rules/"
+    dest: "/etc/prometheus/rules/"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: "0644"
+  tags:
+    - prometheus_thanos
+
+- name: Enable and start Prometheus
+  ansible.builtin.systemd_service:
+    name: prometheus
+    state: "{{ prometheus_service_state }}"
+    enabled: "{{ prometheus_service_enabled }}"
+    daemon_reload: true
+  tags:
+    - prometheus_thanos
+
+- name: Ensure rsync cron job is installed for Sidecar nodes
+  ansible.builtin.cron:
+    name: "Rsync Thanos blocks to prd-prometheus01"
+    user: root
+    minute: "*/5"
+    job: >
+      "{{ thanos_config_dir }}/sync_thanos_blocks.sh"
+  when: "'sidecar' in prometheus_role"
+  tags:
+    - prometheus_thanos

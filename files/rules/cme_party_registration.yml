@@ -1,0 +1,23 @@
+---
+groups:
+  - name: CMEpartyID
+    rules:
+      - alert: CMEpartyID:NotRegistered
+        expr: PartyIdRegistrationResult == 0.0
+        for: 10s
+        labels:
+          severity: page
+        annotations:
+          summary: "The {{ $labels.party_id }} partry ID is NOT registered! "
+          description: "Issue with CME party_id registering. CME party_id {{ $labels.party_id }}  is not registered! Contanct OPS to have the failed party ID fixed or removed"
+
+  - name: CMEpartyID_monitor_is_active
+    rules:
+      - alert: CME_partyID_is_DOWN
+        expr: max without(replica) (up{job="monitor-cme-party-id-reg"}) == 0
+        for: 20s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Exporter {{ $labels.job }} is down"
+          description: "The exporter {{ $labels.job }} is not responding or is down for more than 20 seconds."

@@ -1,0 +1,16 @@
+[Unit]
+Description=Thanos Store Gateway
+After=network.target
+
+[Service]
+User={{ prometheus_user }}
+Group={{ prometheus_group }}
+ExecStart={{ binary_dir }}/thanos store \
+  --data-dir={{ thanos_data_root_dir }} \
+  --objstore.config-file={{ thanos_config_dir }}/store-objstore.yml \
+  --http-address=0.0.0.0:{{ thanos_store_http_port }} \
+  --grpc-address=0.0.0.0:{{ thanos_store_grpc_port }}
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,44 @@
+groups:
+  - name: Tradeflow
+    rules:
+      - alert: tradeflow:component_down
+        expr: node_systemd_unit_state{name =~"tmg-.*(trade|norm|recon|fillw|writer|alert).*", job="tradeflow", state="active"} ==0
+        for: 10s
+        labels:
+          severity: page
+        annotations:
+          summary: "{{ $labels.name }} is down!"
+          description: "TradeFlow component {{ $labels.name }} in {{ $labels.host }} has been down for more than 10s!\n http://grafana/d/JQE1oyhWk/tradeflow?from=now-3h&to=now&orgId=1&theme=light&refresh=10s&var-host=All&var-component=All&var-state=All&var-monitor_states=All"
+
+  - name: tc_logon_monitor
+    rules:
+      - alert: Tradecapture_monitor_is_DOWN
+        expr: max without(replica) (up{job="tc-dc-logon-monitoring"}) == 0
+        for: 20s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Exporter {{ $labels.job }} on {{ $labels.host }}  is down"
+          description: "The exporter {{ $labels.job }} on {{ $labels.host }}  is not responding or is down for more than 20 seconds. Dashboard is here: http://grafana/d/JQE1oyhWk/tradeflow?orgId=1"
+
+  - name: tradecapture_logon_failure
+    rules:
+      - alert: Tradecapture_logon_failed
+        expr: Tradecapture_Logon_result{}  == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Session: {{ $labels.sessions }} on {{ $labels.host }}  failed to logon"
+          description: "The exporter {{ $labels.job }} on {{ $labels.host }}  is reporting that session {{ $labels.sessions }} failed to logon. Dashboard is here: http://grafana/d/JQE1oyhWk/tradeflow?orgId=1 "
+
+  - name: Risk_container_generates_Gigs_of_logs
+    rules:
+      - alert: Runaway_Risk_logs
+        expr: rate(node_disk_written_bytes_total{host=~".*-prd-risk.*"}[5m]) > 15000000
+        for: 10s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Host: {{ $labels.host }} is overflowing with logs"
+          description: "Host:  {{ $labels.host }}  is overflowing with logs. (Abnormal amount of logs is being generated) Dashboard is here: http://grafana/d/cd5f8211-a521-411b-b3b0-ddc3ed8aa23c/linux-basic-stats?orgId=1&var-hostname={{ $labels.host }}&from=now-2d&to=now "

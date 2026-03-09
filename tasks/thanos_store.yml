@@ -1,0 +1,25 @@
+---
+- name: Configure systemd service for Thanos Store
+  ansible.builtin.template:
+    src: thanos-store.service.j2
+    dest: /etc/systemd/system/thanos-store.service
+    mode: "0644"
+  tags:
+    - prometheus_thanos
+
+- name: Configure objstore.yml for Thanos Store
+  ansible.builtin.template:
+    src: store-objstore.yml.j2
+    dest: "{{ thanos_config_dir }}/store-objstore.yml"
+    mode: "0644"
+  tags:
+    - prometheus_thanos
+
+- name: Enable and start Thanos Store
+  ansible.builtin.systemd_service:
+    name: thanos-store
+    state: restarted
+    enabled: true
+    daemon_reload: true
+  tags:
+    - prometheus_thanos

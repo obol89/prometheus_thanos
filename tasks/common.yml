@@ -1,0 +1,112 @@
+---
+- name: Create Prometheus group
+  ansible.builtin.group:
+    name: "{{ prometheus_group }}"
+    state: present
+  tags:
+    - prometheus_thanos
+
+- name: Create Prometheus user within Prometheus group
+  ansible.builtin.user:
+    name: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    system: true
+    shell: "/sbin/nologin"
+    state: present
+  tags:
+    - prometheus_thanos
+
+- name: Create Prometheus directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: "0755"
+  loop:
+    - "{{ prometheus_data_dir }}"
+    - "{{ prometheus_config_dir }}"
+    - "{{ prometheus_config_dir }}/file_sd_configs"
+    - "{{ prometheus_config_dir }}/rules"
+  tags:
+    - prometheus_thanos
+    - prometheus_reload
+
+- name: Create Prometheus Alertmanager directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: "0755"
+  loop:
+    - "{{ prometheus_alertmanager_config_path }}"
+    - "{{ prometheus_alertmanager_data_dir }}"
+  tags:
+    - prometheus_thanos
+    - prometheus_reload
+
+- name: Create Thanos directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: "0755"
+  loop:
+    - "{{ thanos_data_dir }}"
+    - "{{ thanos_data_root_dir }}"
+    - "{{ thanos_config_dir }}"
+  tags:
+    - prometheus_thanos
+
+- name: Create Thanos directories for Thanos Store
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: "0755"
+  delegate_to: prd-prometheus01
+  run_once: false
+  loop:
+    - "{{ thanos_data_root_dir }}/{{ inventory_hostname }}"
+  tags:
+    - prometheus_thanos
+  when: "'sidecar' in prometheus_role"
+
+- name: Download Prometheus binary
+  ansible.builtin.get_url:
+    url: "http://nexus.example.com/repository/raw-files/prometheus/prometheus-{{ prometheus_version }}"
+    dest: "{{ binary_dir }}/prometheus"
+    mode: "0755"
+    force: true
+  tags:
+    - prometheus_thanos
+
+- name: Download Prometheus Alertmanager binary
+  ansible.builtin.get_url:
+    url: "http://nexus.example.com/repository/raw-files/prometheus/alertmanager-{{ prometheus_alertmanager_version }}"
+    dest: "{{ binary_dir }}/alertmanager"
+    mode: "0755"
+    force: true
+  tags:
+    - prometheus_thanos
+
+- name: Download Prometheus promtool binary
+  ansible.builtin.get_url:
+    url: "http://nexus.example.com/repository/raw-files/prometheus/promtool-{{ prometheus_version }}"
+    dest: "{{ binary_dir }}/promtool"
+    mode: "0755"
+    force: true
+  tags:
+    - prometheus_thanos
+
+- name: Download Thanos binary
+  ansible.builtin.get_url:
+    url: "http://nexus.example.com/repository/raw-files/thanos/thanos-{{ thanos_version }}"
+    dest: "{{ binary_dir }}/thanos"
+    mode: "0755"
+    force: true
+  tags:
+    - prometheus_thanos

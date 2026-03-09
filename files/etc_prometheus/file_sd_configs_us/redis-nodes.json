@@ -1,0 +1,170 @@
+[
+    {
+        "targets": ["dev-kafka01:9121"],
+        "labels": {
+            "__metrics_path__": "/scrape",
+            "__param_target": "dev-kafka01:7001",
+            "colo": "dc1",
+            "env": "dev",
+            "host": "dev-kafka01",
+            "instance": "dev-kafka01:7001",
+            "namespace": "dev-cluster01"
+        }
+    },
+    {
+        "targets": ["dev-kafka01:9121"],
+        "labels": {
+            "__metrics_path__": "/scrape",
+            "__param_target": "dev-kafka01:7004",
+            "colo": "dc1",
+            "env": "dev",
+            "host": "dev-kafka01",
+            "instance": "dev-kafka01:7004",
+            "namespace": "dev-cluster01"
+        }
+    },
+    {
+        "targets": ["dev-trade02:9121"],
+        "labels": {
+            "__metrics_path__": "/scrape",
+            "__param_target": "dev-trade02:7003",
+            "colo": "dc1",
+            "env": "dev",
+            "host": "dev-trade02",
+            "instance": "dev-trade02:7003",
+            "namespace": "dev-cluster01"
+        }
+    },
+    {
+        "targets": ["dev-trade02:9121"],
+        "labels": {
+            "__metrics_path__": "/scrape",
+            "__param_target": "dev-trade02:7006",
+            "colo": "dc1",
+            "env": "dev",
+            "host": "dev-trade02",
+            "instance": "dev-trade02:7006",
+            "namespace": "dev-cluster01"
+        }
+    },
+    {
+        "targets": ["dev-auxiliary01:9121"],
+        "labels": {
+            "__metrics_path__": "/scrape",
+            "__param_target": "dev-auxiliary01:7005",
+            "colo": "dc1",
+            "env": "dev",
+            "host": "dev-auxiliary01",
+            "instance": "dev-auxiliary01:7005",
+            "namespace": "dev-cluster01"
+        }
+    },
+    {
+        "targets": ["dev-auxiliary01:9121"],
+        "labels": {
+            "__metrics_path__": "/scrape",
+            "__param_target": "dev-auxiliary01:7002",
+            "colo": "dc1",
+            "env": "dev",
+            "host": "dev-auxiliary01",
+            "instance": "dev-auxiliary01:7002",
+            "namespace": "dev-cluster01"
+        }
+    },
+    {
+        "targets": ["dev-auxiliary01:9121"],
+        "labels": {
+            "__metrics_path__": "/scrape",
+            "__param_target": "dev-core10:6379",
+            "colo": "dc1",
+            "env": "dev",
+            "host": "dev-core10",
+            "instance": "dev-core10:6379",
+            "namespace": "dev-node01-1"
+        }
+    },
+    {
+        "targets": ["dev-auxiliary01:9121"],
+        "labels": {
+            "__metrics_path__": "/scrape",
+            "__param_target": "dev-kafka01:6388",
+            "colo": "dc1",
+            "env": "dev",
+            "host": "dev-kafka01",
+            "instance": "dev-kafka01:6388",
+            "namespace": "dev-node01-2"
+        }
+    },
+    {
+        "targets": ["prd-services01:9121"],
+        "labels": {
+            "__metrics_path__": "/scrape",
+            "__param_target": "prd-services01:7002",
+            "colo": "dc1",
+            "env": "prd",
+            "host": "prd-services01",
+            "instance": "prd-services01:7002",
+            "namespace": "prd-cluster01"
+        }
+    },
+    {
+        "targets": ["prd-services01:9121"],
+        "labels": {
+            "__metrics_path__": "/scrape",
+            "__param_target": "prd-services01:7005",
+            "colo": "dc1",
+            "env": "prd",
+            "host": "prd-services01",
+            "instance": "prd-services01:7005",
+            "namespace": "prd-cluster01"
+        }
+    },
+    {
+        "targets": ["prd-trade01:9121"],
+        "labels": {
+            "__metrics_path__": "/scrape",
+            "__param_target": "prd-trade01:7003",
+            "colo": "dc1",
+            "env": "prd",
+            "host": "prd-trade01",
+            "instance": "prd-trade01:7003",
+            "namespace": "prd-cluster01"
+        }
+    },
+    {
+        "targets": ["prd-trade01:9121"],
+        "labels": {
+            "__metrics_path__": "/scrape",
+            "__param_target": "prd-trade01:7006",
+            "colo": "dc1",
+            "env": "prd",
+            "host": "prd-trade01",
+            "instance": "prd-trade01:7006",
+            "namespace": "prd-cluster01"
+        }
+    },
+    {
+        "targets": ["prd-redis01:9121"],
+        "labels": {
+            "__metrics_path__": "/scrape",
+            "__param_target": "prd-redis01:7001",
+            "colo": "dc1",
+            "env": "prd",
+            "host": "prd-redis01",
+            "instance": "prd-redis01:7001",
+            "namespace": "prd-cluster01"
+        }
+    },
+    {
+        "targets": ["prd-redis01:9121"],
+        "labels": {
+            "__metrics_path__": "/scrape",
+            "__param_target": "prd-redis01:7004",
+            "colo": "dc1",
+            "env": "prd",
+            "host": "prd-redis01",
+            "instance": "prd-redis01:7004",
+            "namespace": "prd-cluster01"
+        }
+    }
+]

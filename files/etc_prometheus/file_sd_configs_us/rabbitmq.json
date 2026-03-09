@@ -1,0 +1,35 @@
+[
+  {
+    "targets": [
+      "dev-proxy01:15672"
+    ],
+    "labels": {
+      "module": "RabbitMq",
+      "__metrics_path__": "/api/metrics",
+      "colo": "dc1",
+      "env": "dev"
+    }
+  },
+  {
+    "targets": [
+      "prd-rabbitmq03:15672"
+    ],
+    "labels": {
+      "module": "RabbitMq",
+      "__metrics_path__": "/api/metrics",
+      "colo": "dc2",
+      "env": "prd"
+    }
+  },
+  {
+    "targets": [
+      "dev-kafka01:15692"
+    ],
+    "labels": {
+      "module": "RabbitMq",
+      "__metrics_path__": "/metrics/per-object",
+      "colo": "dc1",
+      "env": "uat"
+    }
+  }
+]

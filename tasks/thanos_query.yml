@@ -1,0 +1,17 @@
+---
+- name: Configure systemd service for Thanos Query
+  ansible.builtin.template:
+    src: thanos-query.service.j2
+    dest: /etc/systemd/system/thanos-query.service
+    mode: "0644"
+  tags:
+    - prometheus_thanos
+
+- name: Enable and start Thanos Query
+  ansible.builtin.systemd_service:
+    name: thanos-query
+    state: restarted
+    enabled: true
+    daemon_reload: true
+  tags:
+    - prometheus_thanos

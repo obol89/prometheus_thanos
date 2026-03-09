@@ -1,0 +1,235 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  scrape_timeout: 10s
+  external_labels:
+    region: {{ prometheus_region }}
+    replica: {{ prometheus_role }}
+
+rule_files:
+  - "/etc/prometheus/rules/tradeflow.yml"
+  - "/etc/prometheus/rules/miscellaneous.yml"
+  - "/etc/prometheus/rules/elasticsearch_exporter.yml"
+  - "/etc/prometheus/rules/cme_party_registration.yml"
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["{{ ansible_hostname }}:9090"]
+
+  - job_name: last-user-monitoring-devices
+    metrics_path: /metrics
+    scrape_interval: 600s
+    scrape_timeout: 15s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-last-user-devices-eu
+        refresh_interval: 600s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"   
+
+  - job_name: last-user-monitoring-vm
+    metrics_path: /metrics
+    scrape_interval: 600s
+    scrape_timeout: 15s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-last-user-vm-eu
+        refresh_interval: 600s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: home-usage-monitoring-devices
+    metrics_path: /metrics
+    scrape_interval: 600s
+    scrape_timeout: 30s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-home-usage-devices-eu
+        refresh_interval: 600s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"    
+
+  - job_name: home-usage-monitoring-vm
+    metrics_path: /metrics
+    scrape_interval: 600s
+    scrape_timeout: 30s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-home-usage-vm-eu
+        refresh_interval: 600s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: timesync-devices
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-timesync-devices-eu
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"    
+
+  - job_name: timesync-vm
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-timesync-vm-eu
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: windows-device-monitoring
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-monitoring-devices-windows-eu
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+  
+  - job_name: windows-vm-monitoring
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-monitoring-vm-windows-eu
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: "infrastructure-monitoring"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-monitoring-devices-eu
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: "vm-monitoring"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-monitoring-vm-eu
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: "docker-vm-monitoring"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-monitoring-docker-eu
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+  
+  - job_name: "docker-baremetal-monitoring"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-monitoring-docker-eu
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: "containers-vm-monitoring"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-monitoring-containers-eu
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+  
+  - job_name: "containers-baremetal-monitoring"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-monitoring-containers-eu
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: "tradeflow"
+    metrics_path: /metrics
+    scrape_interval: 5s
+    scrape_timeout: 4s
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/target_tradeflow_eu.json'
+
+  - job_name: "tc-dc-logon-monitoring"
+    metrics_path: /
+    scrape_interval: 30s
+    scrape_timeout: 8s
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/file_sd_configs/tc_dc_logon_monitor_eu.json'
+
+  - job_name: "linux-processes-vm"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/virtualization/virtual-machines/?export=prometheus-processes-vm-eu
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: "linux-processes-devices"
+    metrics_path: /metrics
+    scrape_interval: 30s
+    scrape_timeout: 10s
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-processes-devices-eu
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+
+  - job_name: 'snmp'
+    http_sd_configs:
+      - url: http://netbox/api/dcim/devices/?export=prometheus-snmp-devices-eu
+        refresh_interval: 60s
+        authorization:
+          type: "Token"
+          credentials: "{{ netbox_api_token }}"
+    metrics_path: /snmp
+    scrape_interval: 30s
+    scrape_timeout: 15s
+    params:
+      auth: [{{ snmp_auth_profile }}]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: {{ ansible_hostname }}:9116  # The SNMP exporter's real hostname:port.
+
+  # Global snmp_exporter-level metrics
+  - job_name: 'snmp_exporter'
+    static_configs:
+      - targets: ['{{ ansible_hostname }}:9116']

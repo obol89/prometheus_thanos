@@ -1,0 +1,75 @@
+[
+    {
+        "targets": [
+            "riskcalculator:8404"
+        ],
+        "labels": {
+            "module": "riskcalc",
+            "colo": "dc2",
+            "env": "prod",
+            "host": "riskcalculator"
+        }
+    },
+    {
+        "targets": [
+            "prd-kafka07:8404"
+        ],
+        "labels": {
+            "module": "intrumentdefs",
+            "colo": "dc2",
+            "env": "prod",
+            "host": "prd-kafka07",
+            "__metrics_path__": "/metrics"
+        }
+    },
+    {
+        "targets": [ "prd-proxy04:8404"],
+        "labels": {
+          "module": "redis",
+          "colo": "dc2",
+          "env":"prod",
+          "host":"prd-proxy04",
+          "__metrics_path__": "/metrics"
+        }
+    },
+    {
+        "targets": [ "dev-kafka01:8455"],
+        "labels": {
+          "module": "redis",
+          "colo": "dc1",
+          "env":"uat",
+          "host":"dev-kafka01",
+          "__metrics_path__": "/metrics"
+        }
+    },
+    {
+        "targets": [ "prd-services01:8404"],
+        "labels": {
+          "module": "multi-router",
+          "colo": "dc2",
+          "env":"prod",
+          "host":"prd-services01",
+          "__metrics_path__": "/metrics"
+        }
+    },
+    {
+        "targets": [ "prd-proxy01:8404"],
+        "labels": {
+          "module": "venus-monitoring-webservice",
+          "colo": "dc2",
+          "env":"prod",
+          "host":"prd-proxy01",
+          "__metrics_path__": "/metrics"
+        }
+    },
+    {
+        "targets": [ "prd-proxy02:8404"],
+        "labels": {
+          "module": "dc2-rabbitmq",
+          "colo": "dc2",
+          "env":"prod",
+          "host":"prd-proxy02",
+          "__metrics_path__": "/metrics"
+        }
+    }
+]

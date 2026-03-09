@@ -1,0 +1,35 @@
+---
+- name: Configure objstore.yml for Thanos Sidecar
+  ansible.builtin.template:
+    src: sidecar-objstore.yml.j2
+    dest: "{{ thanos_config_dir }}/sidecar-objstore.yml"
+    mode: "0644"
+  tags:
+    - prometheus_thanos
+
+- name: Configure systemd service for Thanos Sidecar
+  ansible.builtin.template:
+    src: thanos-sidecar.service.j2
+    dest: /etc/systemd/system/thanos-sidecar.service
+    mode: "0644"
+  tags:
+    - prometheus_thanos
+
+- name: Enable and start Thanos Sidecar
+  ansible.builtin.systemd_service:
+    name: thanos-sidecar
+    state: restarted
+    enabled: true
+    daemon_reload: true
+  tags:
+    - prometheus_thanos
+
+- name: Ensure blocks sync script is installed for Sidecar nodes
+  ansible.builtin.template:
+    src: "sync_thanos_blocks.sh.j2"
+    dest: "{{ thanos_config_dir }}/sync_thanos_blocks.sh"
+    owner: "{{ prometheus_user }}"
+    group: "{{ prometheus_group }}"
+    mode: "0775"
+  tags:
+    - prometheus_thanos

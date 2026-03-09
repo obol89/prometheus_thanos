@@ -1,0 +1,32 @@
+[
+    {
+        "targets": [ "prd-services01:10001"],
+        "labels": {
+          "colo": "dc1",
+          "env":"prod",
+          "exchange":"cme",
+          "host":"prd-services01",
+          "__metrics_path__": "/metrics"
+        }
+    },
+    {
+        "targets": [ "prd-services01:10002"],
+        "labels": {
+          "colo": "dc1",
+          "env":"prod",
+          "exchange":"ice",
+          "host":"prd-services01",
+          "__metrics_path__": "/metrics"
+        }
+    },
+    {
+        "targets": [ "prd-services01:10003"],
+        "labels": {
+          "colo": "dc1",
+          "env":"prod",
+          "exchange":"bvmf",
+          "host":"prd-services01",
+          "__metrics_path__": "/metrics"
+        }
+    }
+]
